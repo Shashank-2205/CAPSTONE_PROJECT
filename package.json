@@ -1,0 +1,16 @@
+{
+  "name": "resqnet",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "client:dev": "npm --prefix client run dev -- --host 0.0.0.0",
+    "server:dev": "npm --prefix server run dev",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "build": "npm --prefix client run build && npm --prefix server run build",
+    "start": "npm --prefix server run start",
+    "test": "echo \"No tests configured yet\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
+  }
+}
