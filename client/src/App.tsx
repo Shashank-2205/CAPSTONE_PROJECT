@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react'
 import { Circle, MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import CitizenPage from './pages/CitizenPage'
+import VolunteerPage from './pages/VolunteerPage'
+import NGOPage from './pages/NGOPage'
+import HospitalPage from './pages/HospitalPage'
+import AdminPage from './pages/AdminPage'
 import './App.css'
 
 const defaultMapCenter: [number, number] = [12.9716, 77.5946]
@@ -244,6 +249,7 @@ function App() {
   const [disasters, setDisasters] = useState<Disaster[]>([])
   const [notifications, setNotifications] = useState<NotificationItem[]>([])
   const [activeRole, setActiveRole] = useState<RoleKey>('citizen')
+  const [currentView, setCurrentView] = useState<'home' | RoleKey>('home')
   const [form, setForm] = useState(initialForm)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -258,6 +264,15 @@ function App() {
   const [nearbyPlaces, setNearbyPlaces] = useState<NearbyPlace[]>([])
   const [placeLoading, setPlaceLoading] = useState(false)
   const [areaName, setAreaName] = useState('your current area')
+  const [welcomeAlertOpen, setWelcomeAlertOpen] = useState(true)
+
+  const emergencyAlertList = emergencies.length > 0
+    ? emergencies.slice(0, 3)
+    : [
+        { id: 'REQ-1042', type: 'Flood', priority: 'Critical', location: 'Bengaluru East', description: 'Severe waterlogging and blocked access near the market lane.' },
+        { id: 'REQ-1089', type: 'Medical', priority: 'High', location: 'Koramangala', description: 'Two patients need rapid transfer support and oxygen backup.' },
+        { id: 'REQ-1121', type: 'Fire', priority: 'Medium', location: 'Whitefield', description: 'Electrical sparks reported near a residential cluster.' },
+      ]
 
   const recommendedPlaces = nearbyPlaces
     .filter((place) => (recommendedCategories[form.type] || []).includes(place.category))
@@ -600,28 +615,126 @@ function App() {
 
   const roleInfo = dashboardByRole[activeRole]
 
+  const operationalSignals = [
+    { label: 'Response speed', value: '4.8m', detail: 'avg dispatch', accent: 'mint' },
+    { label: 'Critical alerts', value: String(summary?.criticalEmergencies ?? 0), detail: 'needs attention', accent: 'amber' },
+    { label: 'Coverage radius', value: '6.2km', detail: 'search area', accent: 'sky' },
+    { label: 'Ready teams', value: String(summary?.availableVolunteers ?? 0), detail: 'on standby', accent: 'rose' },
+  ]
+
+  const timelineSteps = [
+    { title: 'Dispatch verified', time: '2 min ago', tone: 'success' },
+    { title: 'Volunteer routed', time: '5 min ago', tone: 'info' },
+    { title: 'Medical team briefed', time: '9 min ago', tone: 'warning' },
+  ]
+
+  const priorityZones = [
+    { name: 'Bengaluru East', load: 84, status: 'High priority' },
+    { name: 'Koramangala', load: 61, status: 'Monitoring' },
+    { name: 'Whitefield', load: 72, status: 'Critical path' },
+  ]
+
+  if (currentView === 'citizen') {
+    return (
+      <CitizenPage
+        onBack={() => setCurrentView('home')}
+        onRequestHelp={openHelp}
+        pageInfo={roleInfo}
+      />
+    )
+  }
+
+  if (currentView === 'volunteer') {
+    return (
+      <VolunteerPage
+        onBack={() => setCurrentView('home')}
+        onRequestHelp={openHelp}
+        pageInfo={roleInfo}
+      />
+    )
+  }
+
+  if (currentView === 'ngo') {
+    return (
+      <NGOPage
+        onBack={() => setCurrentView('home')}
+        onRequestHelp={openHelp}
+        pageInfo={roleInfo}
+      />
+    )
+  }
+
+  if (currentView === 'hospital') {
+    return (
+      <HospitalPage
+        onBack={() => setCurrentView('home')}
+        onRequestHelp={openHelp}
+        pageInfo={roleInfo}
+      />
+    )
+  }
+
+  if (currentView === 'admin') {
+    return (
+      <AdminPage
+        onBack={() => setCurrentView('home')}
+        onRequestHelp={openHelp}
+        pageInfo={roleInfo}
+      />
+    )
+  }
+
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <div>
-          <p className="eyebrow">ResQNet</p>
-          <h1>Emergency Response &amp; Resource Management</h1>
-        </div>
+      <div className="page-header-actions">
         <button type="button" className="primary-btn" onClick={openHelp}>Request Help</button>
+      </div>
+
+      <header className="topbar-shell">
+        <nav className="topbar-nav" aria-label="Role switcher">
+          {(Object.keys(roleLabels) as RoleKey[]).map((role) => (
+            <button
+              key={role}
+              type="button"
+              className={role === activeRole ? 'topbar-tab active' : 'topbar-tab'}
+              onClick={() => {
+                setActiveRole(role)
+                setCurrentView(
+                  role === 'citizen' || role === 'volunteer' || role === 'ngo' || role === 'hospital' || role === 'admin'
+                    ? role
+                    : 'home',
+                )
+              }}
+            >
+              {roleLabels[role]}
+            </button>
+          ))}
+        </nav>
       </header>
 
-      <nav className="role-bar" aria-label="Role switcher">
-        {(Object.keys(roleLabels) as RoleKey[]).map((role) => (
-          <button
-            key={role}
-            type="button"
-            className={role === activeRole ? 'role-btn active' : 'role-btn'}
-            onClick={() => setActiveRole(role)}
-          >
-            {roleLabels[role]}
-          </button>
+      <section className="hero-shell">
+        <div className="brand-wrap">
+          <p className="eyebrow">RESQNET</p>
+          <h1>Emergency Response &amp; Resource Management</h1>
+        </div>
+      </section>
+
+      <section className="status-toolbar" aria-label="System filters">
+        {['Flood watch', 'Medical surge', 'Volunteer sync', 'Relief route'].map((tag) => (
+          <span key={tag} className="soft-chip">{tag}</span>
         ))}
-      </nav>
+      </section>
+
+      <section className="floating-command-panel">
+        <div>
+          <span className="panel-kicker">Command center</span>
+          <strong>Urban cluster monitor</strong>
+        </div>
+        <div className="command-mini-grid">
+          <span>3 active zones</span>
+          <span>12 teams online</span>
+        </div>
+      </section>
 
       <section className="hero-grid">
         <div className="panel hero-panel">
@@ -636,6 +749,36 @@ function App() {
           <div className="cta-row">
             <button type="button" className="primary-btn" onClick={openReport}>Report Emergency</button>
             <button type="button" className="secondary-btn" onClick={startTracking}>View Map</button>
+          </div>
+
+          <div className="hero-meta">
+            <div className="meta-pill">
+              <span className="meta-dot" />
+              4 pending requests
+            </div>
+            <div className="meta-pill">
+              <span className="meta-dot accent" />
+              2 ambulances dispatched
+            </div>
+            <div className="meta-pill">
+              <span className="meta-dot warm" />
+              1 shelter active
+            </div>
+          </div>
+
+          <div className="hero-mini-grid">
+            <div className="mini-track-card">
+              <span>Critical queue</span>
+              <strong>03</strong>
+            </div>
+            <div className="mini-track-card">
+              <span>Ambulance ETA</span>
+              <strong>08 min</strong>
+            </div>
+            <div className="mini-track-card">
+              <span>Shelter capacity</span>
+              <strong>72%</strong>
+            </div>
           </div>
         </div>
 
@@ -655,6 +798,135 @@ function App() {
           <div className="stat-box">
             <strong>{summary?.availableVolunteers ?? 0}</strong>
             <span>Available volunteers</span>
+          </div>
+
+          <div className="stat-callout">
+            <span className="callout-label">Response pulse</span>
+            <strong>Stable</strong>
+            <small>Coverage remains active across priority zones</small>
+          </div>
+        </div>
+      </section>
+
+      <section className="signal-strip" aria-label="Operational signals">
+        {operationalSignals.map((signal) => (
+          <div key={signal.label} className={`signal-card ${signal.accent}`}>
+            <span>{signal.label}</span>
+            <strong>{signal.value}</strong>
+            <small>{signal.detail}</small>
+          </div>
+        ))}
+      </section>
+
+      <section className="response-rail">
+        <div className="panel pulse-panel">
+          <div className="panel-header">
+            <div>
+              <span className="eyebrow mini">Response readiness</span>
+              <h3>Mission status</h3>
+            </div>
+            <span className="live-badge">Optimal</span>
+          </div>
+
+          <div className="pulse-matrix">
+            <div className="pulse-ring" aria-label="Readiness percent">
+              <span>92%</span>
+              <small>Ready</small>
+            </div>
+
+            <div className="pulse-bars" aria-label="Readiness graph">
+              <span className="bar level-1" />
+              <span className="bar level-2" />
+              <span className="bar level-3" />
+              <span className="bar level-4" />
+              <span className="bar level-5" />
+              <span className="bar level-6" />
+            </div>
+          </div>
+        </div>
+
+        <div className="panel priority-panel">
+          <div className="panel-header">
+            <div>
+              <span className="eyebrow mini">Regional watch</span>
+              <h3>Priority zones</h3>
+            </div>
+          </div>
+
+          <div className="priority-list">
+            {priorityZones.map((zone) => (
+              <div key={zone.name} className="priority-item">
+                <div className="priority-head">
+                  <strong>{zone.name}</strong>
+                  <span>{zone.status}</span>
+                </div>
+                <div className="progress-track">
+                  <div className="progress-fill" style={{ width: `${zone.load}%` }} />
+                </div>
+                <small>{zone.load}% activity load</small>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="panel timeline-panel">
+          <div className="panel-header">
+            <div>
+              <span className="eyebrow mini">Recent flow</span>
+              <h3>Action timeline</h3>
+            </div>
+          </div>
+
+          <div className="timeline">
+            {timelineSteps.map((step) => (
+              <div key={step.title} className={`timeline-item ${step.tone}`}>
+                <span className="timeline-dot" />
+                <div>
+                  <strong>{step.title}</strong>
+                  <small>{step.time}</small>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="panel operations-panel">
+        <div className="panel-header">
+          <div>
+            <span className="eyebrow mini">Live operation pulse</span>
+            <h3>Regional command overview</h3>
+          </div>
+          <span className="live-badge">Monitoring</span>
+        </div>
+
+        <div className="operations-layout">
+          <div className="insight-stack">
+            <div className="mini-kpi">
+              <span>Active zones</span>
+              <strong>{summary?.totalEmergencies ?? 0}</strong>
+            </div>
+            <div className="mini-kpi">
+              <span>Resource flow</span>
+              <strong>{allocations.length}</strong>
+            </div>
+            <div className="mini-kpi">
+              <span>Risk posture</span>
+              <strong>Elevated</strong>
+            </div>
+          </div>
+
+          <div className="activity-feed">
+            <h4>Priority feed</h4>
+            {notifications.slice(0, 3).map((item) => (
+              <div key={item.id} className={`feed-item ${item.type}`}>
+                <span className="feed-dot" />
+                <div>
+                  <strong>{item.title}</strong>
+                  <small>{item.message}</small>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -721,6 +993,53 @@ function App() {
       </section>
 
       {message && <p className="system-message">{message}</p>}
+
+      {welcomeAlertOpen && (
+        <div className="welcome-overlay" role="presentation" onClick={() => setWelcomeAlertOpen(false)}>
+          <div className="welcome-popup" role="dialog" aria-modal="true" aria-label="Emergency requests alert" onClick={(event) => event.stopPropagation()}>
+            <div className="welcome-header">
+              <div>
+                <span className="eyebrow mini">Emergency requests</span>
+                <h3>Live incident alert</h3>
+              </div>
+              <button type="button" className="icon-btn" aria-label="Close alert" onClick={() => setWelcomeAlertOpen(false)}>×</button>
+            </div>
+
+            <div className="alert-summary">
+              <div className="alert-stat">
+                <span>Open cases</span>
+                <strong>{summary?.totalEmergencies ?? emergencyAlertList.length}</strong>
+              </div>
+              <div className="alert-stat">
+                <span>Critical</span>
+                <strong>{summary?.criticalEmergencies ?? 2}</strong>
+              </div>
+              <div className="alert-stat">
+                <span>Dispatch</span>
+                <strong>{summary?.availableVolunteers ?? 12}</strong>
+              </div>
+            </div>
+
+            <div className="alert-list">
+              {emergencyAlertList.map((item) => (
+                <div key={item.id} className="alert-item">
+                  <div className="alert-topline">
+                    <strong>{item.id}</strong>
+                    <span className="alert-priority">{item.priority}</span>
+                  </div>
+                  <div className="alert-meta">
+                    <span>{item.type}</span>
+                    <span>{item.location}</span>
+                  </div>
+                  <p>{item.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <button type="button" className="primary-btn" onClick={() => setWelcomeAlertOpen(false)}>Acknowledge</button>
+          </div>
+        </div>
+      )}
 
       {activeModal && (
         <div className="modal-backdrop" role="presentation" onClick={() => setActiveModal(null)}>
