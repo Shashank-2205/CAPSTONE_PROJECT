@@ -8,7 +8,7 @@ const emergencyStore = [
         description: 'Floodwater entering lower residential blocks and blocking road access.',
         priority: 'Critical',
         status: 'Verified',
-        location: 'Bengaluru East',
+        location: 'Hyderabad West (Gachibowli)',
         createdAt: new Date('2026-01-12T07:20:00.000Z').toISOString(),
         createdBy: 'citizen_1',
     },
@@ -18,7 +18,7 @@ const emergencyStore = [
         description: 'Critical patient transfer request with oxygen support needed.',
         priority: 'High',
         status: 'Assigned',
-        location: 'Koramangala',
+        location: 'Banjara Hills',
         createdAt: new Date('2026-01-12T09:30:00.000Z').toISOString(),
         createdBy: 'citizen_1',
     },
@@ -28,16 +28,16 @@ const emergencyStore = [
         description: 'Warehouse fire reported near bus stand; nearby evacuation advised.',
         priority: 'High',
         status: 'Pending',
-        location: 'Whitefield',
+        location: 'Hitec City',
         createdAt: new Date('2026-01-13T11:10:00.000Z').toISOString(),
         createdBy: 'citizen_1',
     },
 ];
 const volunteerStore = [
-    { id: 'vol_101', name: 'Aisha Kumar', availability: 'Available', area: 'Koramangala' },
-    { id: 'vol_102', name: 'Rohan Singh', availability: 'On route', area: 'Whitefield' },
-    { id: 'vol_103', name: 'Meera Iyer', availability: 'Available', area: 'Bengaluru East' },
-    { id: 'vol_104', name: 'Arjun Das', availability: 'Available', area: 'Indiranagar' },
+    { id: 'vol_101', name: 'Aisha Kumar', availability: 'Available', area: 'Banjara Hills' },
+    { id: 'vol_102', name: 'Rohan Singh', availability: 'On route', area: 'Hitec City' },
+    { id: 'vol_103', name: 'Meera Iyer', availability: 'Available', area: 'Gachibowli' },
+    { id: 'vol_104', name: 'Arjun Das', availability: 'Available', area: 'Secunderabad' },
 ];
 const rescueTasks = [
     {
@@ -58,10 +58,10 @@ const rescueTasks = [
     },
 ];
 const resourceStore = [
-    { id: 'res_101', name: 'Medical Kits', category: 'Medical', quantity: 42, unit: 'kits', location: 'Bengaluru Hub', status: 'Healthy' },
-    { id: 'res_102', name: 'Water Packs', category: 'Food & Water', quantity: 18, unit: 'packs', location: 'Whitefield Depot', status: 'Low stock' },
-    { id: 'res_103', name: 'Shelter Kits', category: 'Shelter', quantity: 33, unit: 'kits', location: 'Koramangala Camp', status: 'Healthy' },
-    { id: 'res_104', name: 'Blankets', category: 'Relief', quantity: 11, unit: 'packs', location: 'Indiranagar Depot', status: 'Critical' },
+    { id: 'res_101', name: 'Medical Kits', category: 'Medical', quantity: 42, unit: 'kits', location: 'Hyderabad Central Depot', status: 'Healthy' },
+    { id: 'res_102', name: 'Water Packs', category: 'Food & Water', quantity: 18, unit: 'packs', location: 'Hitec City Depot', status: 'Low stock' },
+    { id: 'res_103', name: 'Shelter Kits', category: 'Shelter', quantity: 33, unit: 'kits', location: 'Gachibowli Relief Camp', status: 'Healthy' },
+    { id: 'res_104', name: 'Blankets', category: 'Relief', quantity: 11, unit: 'packs', location: 'Secunderabad Depot', status: 'Critical' },
 ];
 const allocationStore = [
     {
@@ -70,7 +70,7 @@ const allocationStore = [
         resourceName: 'Medical Kits',
         emergencyId: 'RESQ-2026-0002',
         quantity: 8,
-        recipient: 'Koramangala Health Camp',
+        recipient: 'Banjara Hills Health Camp',
         status: 'Dispatched',
     },
     {
@@ -79,7 +79,7 @@ const allocationStore = [
         resourceName: 'Shelter Kits',
         emergencyId: 'RESQ-2026-0001',
         quantity: 6,
-        recipient: 'Bengaluru East Relief Zone',
+        recipient: 'Gachibowli Relief Zone',
         status: 'Queued',
     },
 ];
@@ -89,20 +89,20 @@ const hospitalCapacity = [
     { id: 'bed_03', ward: 'ICU', available: 3, occupied: 11, icu: 11, status: 'Critical' },
 ];
 const criticalCases = [
-    { id: 'case_101', patient: 'R. Nair', severity: 'Critical', hospital: 'City General', eta: '05 min', action: 'Priority transfer' },
-    { id: 'case_102', patient: 'S. Babu', severity: 'Severe', hospital: 'City General', eta: '12 min', action: 'Observational care' },
+    { id: 'case_101', patient: 'R. Nair', severity: 'Critical', hospital: 'NIMS Hyderabad', eta: '05 min', action: 'Priority transfer' },
+    { id: 'case_102', patient: 'S. Babu', severity: 'Severe', hospital: 'Apollo Jubilee Hills', eta: '12 min', action: 'Observational care' },
 ];
 const shelters = [
-    { id: 'shelter_01', name: 'Bengaluru East Shelter', capacity: 180, occupants: 120, facilities: ['Food', 'Water', 'Medical'], status: 'Open' },
-    { id: 'shelter_02', name: 'Whitefield Relief Camp', capacity: 140, occupants: 110, facilities: ['Water', 'Sanitation'], status: 'At capacity' },
-    { id: 'shelter_03', name: 'Koramangala Safe Hall', capacity: 200, occupants: 90, facilities: ['Food', 'Water', 'Power'], status: 'Open' },
+    { id: 'shelter_01', name: 'Gachibowli Indoor Stadium Camp', capacity: 1500, occupants: 480, facilities: ['Food', 'Water', 'Medical'], status: 'Open' },
+    { id: 'shelter_02', name: 'Kotla Vijaya Bhaskara Reddy Stadium', capacity: 800, occupants: 320, facilities: ['Water', 'Sanitation'], status: 'Open' },
+    { id: 'shelter_03', name: 'Secunderabad Railway Hall', capacity: 400, occupants: 310, facilities: ['Food', 'Water', 'Power'], status: 'Near Full' },
 ];
 const disasterEvents = [
-    { id: 'disaster_01', name: 'South Bangalore Flooding', region: 'Bengaluru East', severity: 'High', status: 'Active', affectedAreas: 5 },
-    { id: 'disaster_02', name: 'Warehouse Fire', region: 'Whitefield', severity: 'Moderate', status: 'Contained', affectedAreas: 2 },
+    { id: 'disaster_01', name: 'Musi River Flash Flood Surge', region: 'Hyderabad Central & Old City', severity: 'High', status: 'Active', affectedAreas: 5 },
+    { id: 'disaster_02', name: 'Substation Electrical Fire', region: 'Hitec City', severity: 'Moderate', status: 'Contained', affectedAreas: 2 },
 ];
 const notifications = [
-    { id: 'notif_01', title: 'Flood alert escalation', message: 'Bengaluru East shelter capacity is above 80%.', type: 'warning', createdAt: new Date().toISOString() },
+    { id: 'notif_01', title: 'Flood alert escalation', message: 'Musi River lowlands shelter capacity is above 80%.', type: 'warning', createdAt: new Date().toISOString() },
     { id: 'notif_02', title: 'Volunteer dispatched', message: 'Aisha Kumar accepted the medical transfer task.', type: 'info', createdAt: new Date().toISOString() },
     { id: 'notif_03', title: 'Hospital capacity alert', message: 'ICU occupancy reached critical threshold.', type: 'critical', createdAt: new Date().toISOString() },
 ];

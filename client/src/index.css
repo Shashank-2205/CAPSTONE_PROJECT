@@ -1,17 +1,155 @@
 :root {
-  font-family: 'Avenir Next', 'Trebuchet MS', sans-serif;
-  color: #e5eefb;
-  background: #08121f;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: #e2e8f0;
+  background-color: #07090e;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* JioHotstar Design System Tokens */
+  --bg-core: #07090e;
+  --bg-surface-1: #0d111a;
+  --bg-surface-2: #131926;
+  --bg-surface-3: #1c2538;
+  --bg-glass: rgba(15, 22, 36, 0.75);
+  --bg-glass-hover: rgba(26, 38, 62, 0.85);
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(0, 102, 255, 0.4);
+  --border-blue-glow: rgba(0, 102, 255, 0.5);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent-primary-blue: #0066ff;
+  --accent-primary-cyan: #00c6ff;
+  --accent-primary-glow: rgba(0, 102, 255, 0.45);
+  --accent-hotstar-blue: #0066ff;
+  --accent-hotstar-cyan: #00e5ff;
+  --accent-hotstar-green: #00ed82;
+  --accent-jio-pink: #ff0077;
+  --accent-danger: #ef4444;
+  --accent-warning: #f59e0b;
+  --accent-success: #10b981;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  --sidebar-collapsed: 76px;
+  --sidebar-expanded: 240px;
+  --header-height: 72px;
+
+  --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+/* 1. Tactical Crimson Red Alert Theme */
+[data-theme="tactical"] {
+  --bg-core: #0a0606;
+  --bg-surface-1: #150d0d;
+  --bg-surface-2: #221212;
+  --bg-surface-3: #2d1818;
+  --bg-glass: rgba(28, 14, 14, 0.85);
+  --bg-glass-hover: rgba(45, 20, 20, 0.9);
+  --border-subtle: rgba(239, 68, 68, 0.18);
+  --border-glow: rgba(220, 38, 38, 0.5);
+  --border-blue-glow: rgba(220, 38, 38, 0.6);
+  --text-primary: #fef2f2;
+  --text-secondary: #fca5a5;
+  --text-muted: #b91c1c;
+  --accent-primary-blue: #dc2626;
+  --accent-primary-cyan: #f97316;
+  --accent-primary-glow: rgba(220, 38, 38, 0.45);
+}
+
+/* 2. Cyber Neon Blue & Cyan Theme */
+[data-theme="cyber"] {
+  --bg-core: #040814;
+  --bg-surface-1: #09132b;
+  --bg-surface-2: #0f1d3f;
+  --bg-surface-3: #162855;
+  --bg-glass: rgba(9, 19, 43, 0.85);
+  --bg-glass-hover: rgba(18, 36, 75, 0.9);
+  --border-subtle: rgba(0, 242, 254, 0.18);
+  --border-glow: rgba(0, 242, 254, 0.5);
+  --border-blue-glow: rgba(0, 242, 254, 0.6);
+  --text-primary: #f0fdfa;
+  --text-secondary: #99f6e4;
+  --text-muted: #2dd4bf;
+  --accent-primary-blue: #0284c7;
+  --accent-primary-cyan: #00f2fe;
+  --accent-primary-glow: rgba(0, 242, 254, 0.45);
+}
+
+/* 3. Daylight Field High-Contrast Theme */
+[data-theme="light"] {
+  --bg-core: #f1f5f9;
+  --bg-surface-1: #ffffff;
+  --bg-surface-2: #f8fafc;
+  --bg-surface-3: #e2e8f0;
+  --bg-glass: rgba(255, 255, 255, 0.9);
+  --bg-glass-hover: rgba(241, 245, 249, 0.95);
+  --border-subtle: rgba(15, 23, 42, 0.12);
+  --border-glow: rgba(0, 82, 204, 0.35);
+  --border-blue-glow: rgba(0, 82, 204, 0.4);
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --accent-primary-blue: #0052cc;
+  --accent-primary-cyan: #0284c7;
+  --accent-primary-glow: rgba(0, 82, 204, 0.3);
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
+html, body {
+  min-height: 100vh;
+  background-color: var(--bg-core);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* Custom Hotstar Cinema Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080b12;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-hotstar-blue);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+  color: var(--text-primary);
 }
